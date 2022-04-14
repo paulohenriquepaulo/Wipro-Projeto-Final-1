@@ -62,4 +62,6 @@ public class Cliente {
 	public void setRendaMensal(Double rendaMensal) {
 		this.rendaMensal = rendaMensal;
 	}
+
+	
 }

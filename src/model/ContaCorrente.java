@@ -17,8 +17,6 @@ public class ContaCorrente extends Conta {
 		double saldo = getSaldoConta();
 		
 		if (saque > 0.0 && saque <= saldo) {
-			//saldo -= saque;
-			//atualizarSaldo(saldo);			
 			return true;
 		}
 		return false;

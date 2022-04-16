@@ -8,27 +8,29 @@ import java.util.Random;
 import java.util.Scanner;
 
 import model.Cliente;
+import model.Conta;
 import model.ContaCorrente;
 import model.ContaEspecial;
 
 public class GerenciaContas {
 
-	int opcaoInformada = 1;
-	String numeroDaConta = "";
 	final double RENDA_MINIMA_CONTA_ESPECIAL = 2000.00;
 	final double PORCENTAGEM_LIMITE_ESPECIAL = 0.10;
 	final double PORCENTAGEM_LIMITE_CARTAO = 0.30;
 	final double RENDA_MINIMA_CARTAO = 500.00;
 	final double LIMITE_MINIMO_CARTAO = 50.00;
+	int opcaoInformada = 1;
+	String numeroDaConta;
+	String tipoDaConta;
 
-	Cliente cliente = new Cliente();
+	List<Conta> listaConta = new ArrayList<>();
+	List<Cliente> listaCliente = new ArrayList<>();
+
 	ContaCorrente contaCorrente = new ContaCorrente();
 	ContaEspecial contaEspecial = new ContaEspecial();
+	Cliente cliente = new Cliente();
 
-	List<Cliente> listaCliente = new ArrayList<>();//testando...
-	
 	SimpleDateFormat formatoData = new SimpleDateFormat("dd/MM/yyyy");
-		
 	Scanner sc = new Scanner(System.in);
 	Random random = new Random();
 
@@ -45,6 +47,7 @@ public class GerenciaContas {
 				System.out.println("[2] Efetuar Depósito");
 				System.out.println("[3] Efetuar Saque Conta Corrente");
 				System.out.println("[4] Efetuar Saque Conta Espécial");
+				System.out.println("[5] Dados das Contas");
 				System.out.println("[0] Sair");
 				System.out.print("Informe sua opção para continuar: ");
 				opcaoInformada = Integer.parseInt(sc.next());
@@ -67,11 +70,15 @@ public class GerenciaContas {
 					sc.nextLine();
 					saqueContaEspecial();
 					break;
+				case 5:
+					sc.nextLine();
+					dadosContaCliente();
+					break;
 				case 0:
 					System.out.println("\nObrigado, volte sempre!");
 					break;
 				default:
-					System.out.println("Opção inválida, tente novamente!");
+					System.out.println("\nOpção inválida, tente novamente!");
 					break;
 				}
 			} catch (Exception e) {
@@ -83,55 +90,54 @@ public class GerenciaContas {
 	}
 
 	public void criarConta() {
-		
+
 		criarCliente();
 
 		System.out.println("\n------------------------------------");
 		System.out.println("Conta criada com sucesso!");
-		System.out.println("------------------------------------");
+		System.out.println("------------------------------------");		
 
-		double rendaMensal = cliente.getRendaMensal();
-
-		if (rendaMensal >= RENDA_MINIMA_CONTA_ESPECIAL) {
-			System.out.println("Tipo de conta: Conta Espécial");
-		} else {
-			System.out.println("Tipo de conta: Conta Corrente");
-		}
-
+		numeroDaConta = "";
 		for (int i = 0; i < 5; i++) {
 			numeroDaConta += Integer.toString(random.nextInt(9));
 		}
 		System.out.println("Número da conta: " + numeroDaConta);
+		System.out.println("Saldo: 0,00");
+		
+		double rendaMensal = cliente.getRendaMensal();
+		if (rendaMensal >= RENDA_MINIMA_CONTA_ESPECIAL) {
+			tipoDaConta = "Conta Espécial";
+			System.out.println("Tipo de conta: " + tipoDaConta);
+		} else {
+			tipoDaConta = "Conta Corrente";
+			System.out.println("Tipo de conta: " + tipoDaConta);
+		}
+
+		double limiteContaEspecial = 0.0;
+		if (rendaMensal >= RENDA_MINIMA_CONTA_ESPECIAL) {
+			limiteContaEspecial = rendaMensal * PORCENTAGEM_LIMITE_ESPECIAL;
+			System.out.println("Limite Espécial: " +  String.format("%.2f", limiteContaEspecial));
+		}
 
 		System.out.println("Nome: " + cliente.getNome());
 		System.out.println("Cpf: " + cliente.getCpf());
 		System.out.println("Data de nascimento: " + formatoData.format(cliente.getDataNascimento()));
 		System.out.println("Telefone: " + cliente.getTelefone());
-		System.out.println("Saldo: 0.00");
-
-		if (rendaMensal >= RENDA_MINIMA_CONTA_ESPECIAL) {
-			System.out.println("Limite Espécial: " + rendaMensal * PORCENTAGEM_LIMITE_ESPECIAL);
-		}
 
 		System.out.println("Cartão de credito Mastercard");
+		double limiteCartaoDeCredito = 0.0;
 		if (rendaMensal >= RENDA_MINIMA_CARTAO) {
-			System.out.println("Limite de credito: " + rendaMensal * PORCENTAGEM_LIMITE_CARTAO);
+			limiteCartaoDeCredito = rendaMensal * PORCENTAGEM_LIMITE_CARTAO;
+			System.out.println("Limite de credito: " +  String.format("%.2f", limiteCartaoDeCredito));
 		} else {
-			System.out.println("Limite de credito: " + LIMITE_MINIMO_CARTAO);
+			limiteCartaoDeCredito = LIMITE_MINIMO_CARTAO;
+			System.out.println("Limite de credito: " +  String.format("%.2f", limiteCartaoDeCredito));
 		}
 
-		//testando
-		listaCliente.add(new Cliente(cliente.getNome(), cliente.getCpf(), cliente.getDataNascimento(), 
-							 cliente.getTelefone(), cliente.getRendaMensal()));		
-		for (Cliente clientes : listaCliente) {
-			System.out.println("\ntestando...");
-			System.out.println("Nome: " + clientes.getNome());
-			System.out.println("Cpf: " + clientes.getCpf());
-			System.out.println("Data de nascimento: " + formatoData.format(cliente.getDataNascimento()));
-			System.out.println("Telefone: " + clientes.getTelefone());
-			System.out.println("Renda Mensal: " + clientes.getRendaMensal());
-			System.out.println();
-		}
+		listaCliente.add(new Cliente(cliente.getNome(), cliente.getCpf(), cliente.getDataNascimento(),
+				cliente.getTelefone(), cliente.getRendaMensal()));
+		listaConta.add(new Conta(numeroDaConta, tipoDaConta, 0.00, limiteContaEspecial, "Cartão de credito Mastercard",
+				limiteCartaoDeCredito, 'A'));
 	}
 
 	public void deposito() {
@@ -220,6 +226,37 @@ public class GerenciaContas {
 
 		} catch (Exception e) {
 			System.out.println("\nNão foi possível continuar, formato invalido!");
+		}
+	}
+
+	public void dadosContaCliente() {
+
+		System.out.println("\n------------------------------------");
+		System.out.println("Lista das contas do Banco Wipro:");
+		System.out.println("------------------------------------");
+		
+		if (listaConta.size() > 0) {
+			for (int i = 0; i < listaConta.size(); i++) {			
+				
+				System.out.println("\nNúmero da conta: " + listaConta.get(i).getNumeroConta());
+				System.out.println("Saldo: " +  String.format("%.2f", listaConta.get(i).getSaldoConta()));
+				
+				String tipoDeConta = listaConta.get(i).getTipoDeConta();
+				System.out.println("Tipo de conta: " + tipoDeConta);
+				if(tipoDeConta == "Conta Espécial") {					
+					System.out.println("Limite Espécial: " +  String.format("%.2f", listaConta.get(i).getLimiteContaEspecial()));
+				}
+				
+				System.out.println("Nome: " + listaCliente.get(i).getNome());
+				System.out.println("CPF: " + listaCliente.get(i).getCpf());
+				System.out.println("Data de nascimento: " + formatoData.format(listaCliente.get(i).getDataNascimento()));
+				System.out.println("Telefone: " + listaCliente.get(i).getTelefone());
+				
+				System.out.println(listaConta.get(i).getCartaoDeCredito());
+				System.out.println("Limite de credito: " +  String.format("%.2f", listaConta.get(i).getSaldoCartaoDeCredito()));
+			}
+		} else {
+			System.out.println("\nNo momento nenhuma conta foi encontrada!");
 		}
 	}
 

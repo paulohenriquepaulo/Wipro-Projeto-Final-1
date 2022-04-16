@@ -12,7 +12,7 @@ public class Conta {
 
 	public Conta() {
 	}
-
+	
 	public Conta(String numeroConta, String tipoDeConta, Double saldoConta, Double limiteContaEspecial,
 			String cartaoDeCredito, Double saldoCartaoDeCredito, char statusConta) {
 		super();
@@ -58,10 +58,10 @@ public class Conta {
 	}
 
 	public boolean deposito(String numeroConta, double deposito) {
-		//double saldo = getSaldoConta();
+		// double saldo = getSaldoConta();
 		if (deposito > 0) {
-			//saldo += deposito;
-			//atualizaSaldo(saldo)
+			// saldo += deposito;
+			// atualizaSaldo(saldo)
 			return true;
 		}
 		return false;

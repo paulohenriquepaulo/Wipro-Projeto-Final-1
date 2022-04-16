@@ -42,6 +42,10 @@ Na etapa inicial definimos todos os entregáveis previstos para primeira sprint,
 
 <br>
 
+## 💻 Diagrama de Classes
+
+![img.png](img.png)
+
 ## 💻 Caso de Uso
 
 ![Caso de Uso - Squad Lobo](.github/caso_uso.png "Caso de Uso - Squad Lobo")

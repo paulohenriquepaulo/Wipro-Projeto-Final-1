@@ -44,7 +44,7 @@ Na etapa inicial definimos todos os entregáveis previstos para primeira sprint,
 
 ## 💻 Diagrama de Classes
 
-![img.png](img.png)
+![img_2.png](img_2.png)
 
 ## 💻 Caso de Uso
 
